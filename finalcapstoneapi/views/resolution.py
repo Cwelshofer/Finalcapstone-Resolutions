@@ -8,7 +8,7 @@ from rest_framework import status
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.viewsets import ViewSet
-from finalcapstoneapi.models import Resolution, ResolutionUser
+from finalcapstoneapi.models import Resolution, ResolutionUser, Category
 
 
 
@@ -20,107 +20,124 @@ class Resolutions(ViewSet):
 
         if not request.auth.user.is_staff:
             resolutions = resolutions.filter(approved = True).filter(publication_date__lt=date.today())
+
+        for resolution in resolutions:
+
+            resolution.created_by_current_user = None
+
+            if resolution.user.id == request.auth.user.id:
+                resolution.created_by_current_user = True
+            else:
+                resolution.created_by_current_user = False
+
+        user_id = self.request.query_params.get('user_id', None)
+        if user_id is not None:
+            resolutions = resolutions.filter(user_id=user_id)
+
+        category_id = self.request.query_params.get('category_id', None)
+        if category_id is not None:
+            resolutions = resolutions.filter(category_id=category_id)
             
 
         serializer = ResolutionSerializer(
             resolutions, many=True, context={'request': request})
         return Response(serializer.data)
 
-    # def retrieve(self, request, pk=None):
-    #     """Handle GET requests for single game
-    #     Returns:
-    #         Response -- JSON serialized game instance
-    #     """
-    #     try:
-    #         post = Post.objects.get(pk=pk)
-    #         if post.user.id == request.auth.user.id:
-    #             post.created_by_current_user = True
-    #         else:
-    #             post.created_by_current_user = False
-    #         serializer = PostSerializer(post, context={'request': request})
-    #         return Response(serializer.data)
-    #     except Exception as ex:
-    #         return HttpResponseServerError(ex)
+    def retrieve(self, request, pk=None):
+        """Handle GET requests for single game
+        Returns:
+            Response -- JSON serialized game instance
+        """
+        try:
+            resolution = Resolution.objects.get(pk=pk)
+            if resolution.user.id == request.auth.user.id:
+                resolution.created_by_current_user = True
+            else:
+                resolution.created_by_current_user = False
+            serializer = ResolutionSerializer(resolution, context={'request': request})
+            return Response(serializer.data)
+        except Exception as ex:
+            return HttpResponseServerError(ex)
 
-    # def create(self, request):
-    #     """Handle POST operations
-    #     Returns:
-    #         Response -- JSON serialized post instance
-    #     """
-    #     user = request.auth.user
-    #     post = Post()
+    def create(self, request):
+        """Handle POST operations
+        Returns:
+            Response -- JSON serialized resolution instance
+        """
+        user = request.auth.user
+        resolution = Resolution()
 
-    #     try:
-    #         post.title = request.data["title"]
-    #         post.content = request.data["content"]
-    #         post.publication_date = request.data["publication_date"]
-    #         post.image_url = request.data["image_url"]
+        try:
+            resolution.title = request.data["title"]
+            resolution.content = request.data["content"]
+            resolution.publication_date = request.data["publication_date"]
+            resolution.image_url = request.data["image_url"]
         
-    #     except KeyError as ex:
-    #         return Response({'message': 'Incorrect key was sent in request'}, status=status.HTTP_400_BAD_REQUEST)
+        except KeyError as ex:
+            return Response({'message': 'Incorrect key was sent in request'}, status=status.HTTP_400_BAD_REQUEST)
 
-    #     post.user_id = user.id
+        resolution.user_id = user.id
 
-    #     try:
-    #         category = Category.objects.get(pk=request.data["category_id"])
-    #         post.category_id = category.id
-    #     except Category.DoesNotExist as ex:
-    #         return Response({'message': 'Post type provided is not valid'}, status=status.HTTP_400_BAD_REQUEST)
+        try:
+            category = Category.objects.get(pk=request.data["category_id"])
+            resolution.category_id = category.id
+        except Category.DoesNotExist as ex:
+            return Response({'message': 'Resolution type provided is not valid'}, status=status.HTTP_400_BAD_REQUEST)
 
-    #     if user is not None:
-    #         try:
-    #             post.save()
-    #             serializer = PostSerializer(post, context={'request': request})
-    #             return Response(serializer.data, status=status.HTTP_201_CREATED)
-    #         except ValidationError as ex:
-    #             return Response({"reason": ex.message}, status=status.HTTP_400_BAD_REQUEST)
+        if user is not None:
+            try:
+                resolution.save()
+                serializer = ResolutionSerializer(resolution, context={'request': request})
+                return Response(serializer.data, status=status.HTTP_201_CREATED)
+            except ValidationError as ex:
+                return Response({"reason": ex.message}, status=status.HTTP_400_BAD_REQUEST)
 
 
-    # def update(self, request, pk=None):
-    #     """Handle PUT requests for posts"""
+    def update(self, request, pk=None):
+        """Handle PUT requests for posts"""
        
-    #     resolutionuser = ResolutionUser.objects.get(user=request.auth.user)
+        resolutionuser = ResolutionUser.objects.get(user=request.auth.user)
 
-    #     post = Post.objects.get(pk=pk)
-    #     post.title = request.data["title"]
-    #     post.publication_date = request.data["publication_date"]
-    #     post.content = request.data["content"]
-    #     post.image_url = request.data["image_url"]
-    #     post.user = resolutionuser
+        resolution = Resolution.objects.get(pk=pk)
+        resolution.title = request.data["title"]
+        resolution.publication_date = request.data["publication_date"]
+        resolution.content = request.data["content"]
+        resolution.image_url = request.data["image_url"]
+        resolution.user = resolutionuser
 
-    #     category = Category.objects.get(pk=request.data["category_id"])
-    #     post.category = category
-    #     post.save()
+        category = Category.objects.get(pk=request.data["category_id"])
+        resolution.category = category
+        resolution.save()
 
-    #     return Response({}, status=status.HTTP_204_NO_CONTENT)
+        return Response({}, status=status.HTTP_204_NO_CONTENT)
         
 
-    # def destroy(self, request, pk=None):
-    #     """Handle DELETE requests for a single post
-    #     Returns:
-    #         Response -- 200, 404, or 500 status code
-    #     """
-    #     try:
-    #         post = Post.objects.get(pk=pk)
-    #         post.delete()
+    def destroy(self, request, pk=None):
+        """Handle DELETE requests for a single post
+        Returns:
+            Response -- 200, 404, or 500 status code
+        """
+        try:
+            resolution = Resolution.objects.get(pk=pk)
+            resolution.delete()
 
-    #         return Response({}, status=status.HTTP_204_NO_CONTENT)
+            return Response({}, status=status.HTTP_204_NO_CONTENT)
 
-    #     except Post.DoesNotExist as ex:
-    #         return Response({'message': ex.args[0]}, status=status.HTTP_404_NOT_FOUND)
+        except Resolution.DoesNotExist as ex:
+            return Response({'message': ex.args[0]}, status=status.HTTP_404_NOT_FOUND)
 
-    #     except Exception as ex:
-    #         return Response({'message': ex.args[0]}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        except Exception as ex:
+            return Response({'message': ex.args[0]}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-    # @action(methods=['PUT'], detail=True)
-    # def approve(self, request, pk=None):
+    @action(methods=['PUT'], detail=True)
+    def approve(self, request, pk=None):
 
-    #     post = Post.objects.get(pk=pk)
+        resolution = Resolution.objects.get(pk=pk)
 
-    #     post.approved = True
-    #     post.save()
+        resolution.approved = True
+        resolution.save()
         
-    #     return Response(None, status=status.HTTP_204_NO_CONTENT)
+        return Response(None, status=status.HTTP_204_NO_CONTENT)
 
 
 
@@ -147,5 +164,5 @@ class ResolutionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Resolution
         fields = ('id', 'title', 'publication_date', 'content',
-                  'user', 'approved', 'image_url', 'created_by_current_user')
+                  'user', 'approved', 'category_id', 'image_url', 'created_by_current_user')
         depth = 1

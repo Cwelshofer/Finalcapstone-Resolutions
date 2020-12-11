@@ -1,0 +1,24 @@
+[
+    {
+        "model": "finalcapstoneapi.category",
+        "pk": 1,
+        "fields": {
+            "label": "Politics"
+        }
+    },
+    {
+        "model": "finalcapstoneapi.category",
+        "pk": 2,
+        "fields": {
+            "label": "Sports"
+        }
+    },
+    {
+        "model": "finalcapstoneapi.category",
+        "pk": 3,
+        "fields": {
+            "label": "Self Help"
+        }
+    }
+    
+]

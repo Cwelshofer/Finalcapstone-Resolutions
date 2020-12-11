@@ -3,6 +3,8 @@
         "model": "finalcapstoneapi.resolution",
         "pk": 1,
         "fields": {
+            "user": 1,
+            "category": 1,
             "title": "Post title",
             "publication_date": "2020-11-10",
             "image_url": "www.google.com",
@@ -15,6 +17,8 @@
         "model": "finalcapstoneapi.resolution",
         "pk": 2,
         "fields": {
+            "user": 2,
+            "category": 3,
             "title": "Category 3",
             "publication_date": "2020-09-09",
             "image_url": "www.google.com",
@@ -27,6 +31,8 @@
         "model": "finalcapstoneapi.resolution",
         "pk": 3,
         "fields": {
+            "user": 2,
+            "category": 2,
             "title": "Category 2",
             "publication_date": "2020-09-09",
             "image_url": "www.google.com",
