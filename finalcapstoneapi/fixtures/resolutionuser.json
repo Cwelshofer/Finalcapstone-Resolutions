@@ -1,0 +1,21 @@
+[
+    {
+        "model": "finalcapstoneapi.resolutionuser",
+        "pk": 1,
+        "fields": {
+            "bio": "",
+            "profile_image_url": "",
+            "user": 1
+        }
+    },
+    {
+        "model": "finalcapstoneapi.resolutionuser",
+        "pk": 2,
+        "fields": {
+            "bio": "",
+            "profile_image_url": "",
+            "user": 2
+        }
+    }
+    
+]
