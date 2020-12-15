@@ -1,0 +1,24 @@
+[
+    {
+        "model": "finalcapstoneapi.tag",
+        "pk": 1,
+        "fields": {
+            "label": "Monday thoughts"
+        }
+    },
+    {
+        "model": "finalcapstoneapi.tag",
+        "pk": 2,
+        "fields": {
+            "label": "Jokes"
+        }
+    },
+    {
+        "model": "finalcapstoneapi.tag",
+        "pk": 3,
+        "fields": {
+            "label": "in my feelings"
+        }
+    }
+    
+]

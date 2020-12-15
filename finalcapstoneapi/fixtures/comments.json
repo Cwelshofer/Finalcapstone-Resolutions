@@ -1,0 +1,35 @@
+[
+    {
+        "model": "finalcapstoneapi.comment",
+        "pk": 1,
+        "fields": {
+            "resolution": 1,
+            "author": 1,
+            "content": "This is the content!!",
+            "subject": "This is the subject!!",
+            "created_on": "2020-11-09T13:19:37+00:00"
+        }
+    },
+    {
+        "model": "finalcapstoneapi.comment",
+        "pk": 2,
+        "fields": {
+            "resolution": 1,
+            "author": 1,
+            "content": "Just some stuff",
+            "subject": "More stuff",
+            "created_on": "2020-11-09T15:22:45+00:00"
+        }
+    },
+    {
+        "model": "finalcapstoneapi.comment",
+        "pk": 3,
+        "fields": {
+            "resolution": 2,
+            "author": 1,
+            "content": "Insert content here..",
+            "subject": "Insert subject here...",
+            "created_on": "2020-11-09T13:19:50+00:00"
+        }
+    }
+]
