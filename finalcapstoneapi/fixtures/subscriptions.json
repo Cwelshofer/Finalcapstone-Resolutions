@@ -1,0 +1,13 @@
+[
+    {
+        "model": "finalcapstoneapi.subscription",
+        "pk": 1,
+        "fields": {
+            "follower": 1,
+            "author": 2,
+            "created_on": "2020-11-10",
+            "ended_on": null
+        }
+    }
+
+]

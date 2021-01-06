@@ -17,9 +17,10 @@ class Resolutions(ViewSet):
     def list(self, request):
 
         resolutions = Resolution.objects.all()
+        completed = self.request.query_params.get('completed', None)
 
         if not request.auth.user.is_staff:
-            resolutions = resolutions.filter(approved = True).filter(publication_date__lt=date.today())
+            resolutions = resolutions.filter(approved = True)
 
         for resolution in resolutions:
 
@@ -34,11 +35,14 @@ class Resolutions(ViewSet):
         if user_id is not None:
             resolutions = resolutions.filter(user_id=user_id)
 
+        completed = self.request.query_params.get('completed', None)
+        if completed is not None:
+            resolutions = resolutions.filter(completed=completed)
+
         category_id = self.request.query_params.get('category_id', None)
         if category_id is not None:
             resolutions = resolutions.filter(category_id=category_id)
-            
-
+        
         serializer = ResolutionSerializer(
             resolutions, many=True, context={'request': request})
         return Response(serializer.data)
@@ -72,7 +76,7 @@ class Resolutions(ViewSet):
             resolution.content = request.data["content"]
             resolution.publication_date = request.data["publication_date"]
             resolution.image_url = request.data["image_url"]
-        
+            resolution.completed = request.data["completed"]
         except KeyError as ex:
             return Response({'message': 'Incorrect key was sent in request'}, status=status.HTTP_400_BAD_REQUEST)
 
@@ -103,6 +107,7 @@ class Resolutions(ViewSet):
         resolution.publication_date = request.data["publication_date"]
         resolution.content = request.data["content"]
         resolution.image_url = request.data["image_url"]
+        resolution.completed = request.data["completed"]
         resolution.user = resolutionuser
 
         category = Category.objects.get(pk=request.data["category_id"])
@@ -134,10 +139,11 @@ class Resolutions(ViewSet):
 
         resolution = Resolution.objects.get(pk=pk)
 
-        resolution.approved = True
+        resolution.completed = True
         resolution.save()
         
         return Response(None, status=status.HTTP_204_NO_CONTENT)
+   
 
 
 
@@ -164,5 +170,5 @@ class ResolutionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Resolution
         fields = ('id', 'title', 'publication_date', 'content',
-                  'user', 'approved', 'category_id', 'image_url', 'created_by_current_user')
+                  'user', 'approved', 'category_id', 'image_url', 'created_by_current_user', 'completed')
         depth = 1

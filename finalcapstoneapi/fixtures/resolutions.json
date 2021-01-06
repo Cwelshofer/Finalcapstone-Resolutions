@@ -4,12 +4,13 @@
         "pk": 1,
         "fields": {
             "user": 1,
-            "category": 1,
+            "category": 2,
             "title": "Post title",
             "publication_date": "2020-11-10",
             "image_url": "www.google.com",
             "content": "Django is hard",
-            "approved": 1
+            "approved": 1,
+            "completed": false
         }
     },
     
@@ -23,7 +24,8 @@
             "publication_date": "2020-09-09",
             "image_url": "www.google.com",
             "content": "Django is hard",
-            "approved": 1
+            "approved": 1,
+            "completed": false
         }
     },
 
@@ -37,7 +39,37 @@
             "publication_date": "2020-09-09",
             "image_url": "www.google.com",
             "content": "Category 2",
-            "approved": 1
+            "approved": 1,
+            "completed": false
+        }
+    },
+
+    {
+        "model": "finalcapstoneapi.resolution",
+        "pk": 4,
+        "fields": {
+            "user": 2,
+            "category": 2,
+            "title": "Category 777",
+            "publication_date": "2020-09-09",
+            "image_url": "www.google.com",
+            "content": "Category 777",
+            "approved": 1,
+            "completed": false
+        }
+    },
+    {
+        "model": "finalcapstoneapi.resolution",
+        "pk": 5,
+        "fields": {
+            "user": 2,
+            "category": 2,
+            "title": "Category 757",
+            "publication_date": "2020-09-09",
+            "image_url": "www.google.com",
+            "content": "Category 2",
+            "approved": 1,
+            "completed": false
         }
     }
 ]

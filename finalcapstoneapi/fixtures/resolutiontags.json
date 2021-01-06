@@ -4,7 +4,7 @@
         "pk": 1,
         "fields": {
             "tag": 1,
-            "post": 1
+            "resolution": 1
         }
     },
 
@@ -13,7 +13,7 @@
         "pk": 2,
         "fields": {
             "tag": 2,
-            "post": 2
+            "resolution": 2
         }
     }
     

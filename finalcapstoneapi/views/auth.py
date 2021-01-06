@@ -7,7 +7,7 @@ from django.contrib.auth.models import User
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework import status
 from rest_framework.authtoken.models import Token
-from resolutionapi.models import resolutionUser
+from finalcapstoneapi.models import ResolutionUser
 
 
 
@@ -57,7 +57,7 @@ def register_user(request):
         email=req_body['email'],
         password=req_body['password'],
         first_name=req_body['first_name'],
-        last_name=req_body['last_name']
+        last_name=req_body['last_name'],
     )
 
     resolution_user = ResolutionUser.objects.create(

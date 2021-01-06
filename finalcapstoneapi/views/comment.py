@@ -7,6 +7,7 @@ from rest_framework.response import Response
 from rest_framework import serializers
 from rest_framework import status
 from finalcapstoneapi.models import Comment, ResolutionUser, Resolution
+import datetime
 
 
 class Comments(ViewSet):
@@ -73,7 +74,7 @@ class Comments(ViewSet):
             comment.author = author
             comment.content = request.data["content"]
             comment.subject = request.data["subject"]
-            comment.created_on = request.data["created_on"]
+            comment.created_on = datetime.datetime.now
 
             try:
                 comment.save()
