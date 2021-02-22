@@ -75,7 +75,6 @@ class Resolutions(ViewSet):
             resolution.title = request.data["title"]
             resolution.content = request.data["content"]
             resolution.publication_date = request.data["publication_date"]
-            resolution.image_url = request.data["image_url"]
             resolution.completed = request.data["completed"]
         except KeyError as ex:
             return Response({'message': 'Incorrect key was sent in request'}, status=status.HTTP_400_BAD_REQUEST)
@@ -106,7 +105,6 @@ class Resolutions(ViewSet):
         resolution.title = request.data["title"]
         resolution.publication_date = request.data["publication_date"]
         resolution.content = request.data["content"]
-        resolution.image_url = request.data["image_url"]
         resolution.completed = request.data["completed"]
         resolution.user = resolutionuser
 
