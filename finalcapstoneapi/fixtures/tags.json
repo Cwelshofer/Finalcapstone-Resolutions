@@ -12,13 +12,5 @@
         "fields": {
             "label": "Jokes"
         }
-    },
-    {
-        "model": "finalcapstoneapi.tag",
-        "pk": 3,
-        "fields": {
-            "label": "in my feelings"
-        }
     }
-    
 ]
